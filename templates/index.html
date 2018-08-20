@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Test</title>
+    <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <link rel="shortcut icon " href="{{url_for('static',filename='images/icon.jpg')}}" rel="stylesheet">
+
+</head>
+<body>
+<div class="container" >
+    <div class="well text-center">
+        <h1>Inventory Management Web Application</h1>
+
+        </div>
+    {%include "tabs.html"%}
+
+<div class="row">
+    <div class="col md=-12">
+        <h2>Product List<button type="button" class="btn btn-success pull-right"  data-toggle= "modal" data-target="#mymodal"">Add Product Data</button></h2>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissable" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+
+                <span aria-hidden="true">x</span>
+
+            </button>
+        {{message}}
+
+        </div>
+
+        {%endfor%}
+        {%endif%}
+        {%endwith%}
+
+
+
+
+        <table class="table table-striped">
+            <tr>
+                <th>Product_id</th>
+                <th>Product name</th>
+                <th>Quantity</th>
+                <th>warehouse_id</th>
+                <th>Action</th>
+            </tr>
+            {%for row in product%}
+            <tr>
+                <td>{{row.0}}</td>
+                <td>{{row.1}}</td>
+                <td>{{row.2}}</td>
+                <td>{{row.3}}</td>
+
+                <td>
+
+                    <a href="'/update/{{row.0}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a>
+                    <a href="/delete/{{row.0}}" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you wish to delete this product?')">Delete</a>
+
+
+                </td>
+            </tr>
+
+            <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times</button>
+                <h4 class="modal-title">Please Update Data</h4>
+
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('update')}}" method="POST">
+
+                    <div class="form-group">
+                        <label> Product name:</label>
+                        <input type="hidden" name="id" value="{{row.0}}">
+                        <input type="text" class="form-control" name="product"  value="{{row.1}}">
+
+                    </div>
+
+                    <div class="form-group">
+                        <label> Quantity:</label>
+                        <input type="text" class="form-control" name="quantity" value="{{row.2}}">
+
+                    </div>
+
+                    <div class="form-group">
+                        <label> Warehouse_id:</label>
+                        <input type="text" class="form-control" name="warehouse" value="{{row.3}}">
+
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Update Details</button>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+</div>
+</div>
+
+
+
+
+</div>
+
+
+
+            {%endfor%}
+
+
+        </table>
+    </div>
+
+
+
+
+<!--Modal-->
+
+<div id="mymodal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Please Insert Data</h4>
+
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('insert')}}" method="POST">
+
+                    <div class="form-group">
+                        <label> Product name:</label>
+                        <input type="text" class="form-control" name="product" required="1">
+
+                    </div>
+
+                    <div class="form-group">
+                        <label> Quantity:</label>
+                        <input type="text" class="form-control" name="quantity" required="1">
+
+                    </div>
+
+                    <div class="form-group">
+                        <label> Warehouse_id:</label>
+                        <input type="text" class="form-control" name="warehouse" required="1">
+
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Insert Details</button>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+</div>
+</div>
+
+
+
+<!--location table-->
+<div class="row">
+    <div class="col md=-12">
+        <h2>Location List<button type="button" class="btn btn-success pull-right"  data-toggle= "modal" data-target="#mymodalL"">Add Location Data</button></h2>
+
+
+
+
+
+        <table class="table table-striped">
+            <tr>
+                <th>Location_id</th>
+                <th>Location name</th>
+                <th>Action</th>
+            </tr>
+            {%for row in location%}
+            <tr>
+                <td>{{row.0}}</td>
+                <td>{{row.1}}</td>
+
+                <td>
+
+                    <a href="'/updateL/{{row.0}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaleditL{{row.0}}">Edit</a>
+                </td>
+            </tr>
+
+            <div id="modaleditL{{row.0}}" class="modal fade" role="dialog">
+
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times</button>
+                <h4 class="modal-title">Please Update Location</h4>
+
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('updateL')}}" method="POST">
+
+                    <div class="form-group">
+                        <label> Location :</label>
+                        <input type="hidden" name="id" value="{{row.0}}">
+                        <input type="text" class="form-control" name="location"  value="{{row.1}}">
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+</div>
+</div>
+
+
+
+
+</div>
+
+
+
+{%endfor%}
+
+
+        </table>
+    </div>
+
+
+
+
+<!--Modal-->
+
+
+<div id="mymodalL" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Please Insert Location</h4>
+
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('insertL')}}" method="POST">
+
+                    <div class="form-group">
+                        <label> Location name:</label>
+                        <input type="text" class="form-control" name="location" required="1">
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+</div>
+</div>
+
+<!--end of location-->
+
+
+<!--Product Movement-->
+
+
+<div class="row">
+    <div class="col md=-12">
+        <h2>Product Movement Record<button type="button" class="btn btn-success pull-right"  data-toggle= "modal" data-target="#mymodalpm"">Move Product </button></h2>
+
+
+
+
+
+        <table class="table table-striped">
+            <tr>
+                <th>Movement_id</th>
+                <th>Recorded Time</th>
+                <th>From Location</th>
+                <th>To Location</th>
+                <th>Product</th>
+                <th>Quantity</th>
+            </tr>
+            {%for row in promove%}
+            <tr>
+                <td>{{row.0}}</td>
+                <td>{{row.1}}</td>
+                <td>{{row.2}}</td>
+                <td>{{row.3}}</td>
+                <td>{{row.4}}</td>
+                <td>{{row.5}}</td>
+
+            </tr>
+
+            </div>
+</div>
+
+
+
+
+
+
+            {%endfor%}
+
+
+        </table>
+    </div>
+
+
+
+
+<!--Modal-->
+
+<div id="mymodalpm" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Please Insert Movement Information</h4>
+
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('movement')}}" method="POST">
+
+                    <div class="form-group">
+                        <label> From Location:</label>
+                        <input type="text" class="form-control" name="fromlocation" >
+
+                    </div>
+
+                    <div class="form-group">
+                        <label> To Location:</label>
+                        <input type="text" class="form-control" name="tolocation" >
+
+                    </div>
+
+                    <div class="form-group">
+                        <label> product:</label>
+                        <input type="text" class="form-control" name="product" required="1">
+
+                    </div>
+
+                    <div class="form-group">
+                        <label> Transaction Quantity :</label>
+                        <input type="text" class="form-control" name="quantity" required="1">
+
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit" >Enter Transaction</button>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+</div>
+</div>
+
+
+
+<!--End of Product Movement-->
+
+    <div class="well text-center">
+        <h4>
+
+         Flask Test
+
+        </h4>
+    </div>
+
+
+
+</div>
+
+
+
+</body>
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.2.1.min.js')}}"></script>
+
+<script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+</html>
